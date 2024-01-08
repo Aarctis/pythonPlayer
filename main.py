@@ -1,6 +1,6 @@
 import os
 import pygame
-from tkinter import Tk, Label, Button, ttk
+from tkinter import Tk, Label, Button, Canvas
 
 class MusicPlayer:
     def __init__(self, root):
@@ -45,8 +45,8 @@ class MusicPlayer:
         self.progress_label = Label(root, text="", bg="#1E1E1E", fg=self.label_color)
         self.progress_label.pack()
 
-        self.progress_bar = ttk.Progressbar(root, orient="horizontal", length=200, mode="determinate")
-        self.progress_bar.pack()
+        self.progress_canvas = Canvas(root, width=200, height=20, bg="white")
+        self.progress_canvas.pack()
 
         self.play_pause_button = Button(root, text="Play", command=self.toggle_play_pause, bg=self.button_color, fg=self.button_text_color)
         self.play_pause_button.pack()
@@ -82,7 +82,8 @@ class MusicPlayer:
             self.time_label.config(text=time_str)
 
             progress = (current_time / self.song_length) * 100
-            self.progress_bar["value"] = progress
+            self.progress_canvas.delete("progress")
+            self.progress_canvas.create_rectangle(0, 0, progress * 2, 20, fill="black", tags="progress")
 
             progress_str = f"Progress: {progress:.2f}%"
             self.progress_label.config(text=progress_str)
